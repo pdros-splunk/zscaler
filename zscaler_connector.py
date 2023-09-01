@@ -747,6 +747,34 @@ class ZscalerConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_update_category(self, param):
+        """
+        This action is used to URL categories (predefined or custom) and TLD categories by sending a PUT request
+        :param: category ID and request body 
+        :return: status phantom.APP_ERROR/phantom.APP_SUCCESS(along with appropriate message)
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        category_id = param.get('category_id')
+        req_body = json.loads(param.get('body'))
+
+        ret_val, response = self._make_rest_call_helper(
+            '/api/v1/urlCategories/{}'.format(category_id), action_result,
+            data=req_body, method='put'
+        )
+
+        if phantom.is_fail(ret_val):
+            import traceback
+            error = traceback.format_exc()
+            return action_result.get_status(phantom.APP_ERROR, 'Something went wrong during updating: {}'.format(error))
+
+        action_result.add_data(response)
+        summary = action_result.update_summary({})
+        summary['message'] = "Update completed successfully"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_lookup_ip(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
@@ -1004,6 +1032,9 @@ class ZscalerConnector(BaseConnector):
 
         elif action_id == 'list_url_categories':
             ret_val = self._handle_list_url_categories(param)
+        
+        elif action_id == 'update_category':
+            ret_val = self._handle_update_category(param)
 
         elif action_id == 'get_report':
             ret_val = self._handle_get_report(param)

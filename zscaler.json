@@ -10,7 +10,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2017-2023 Splunk Inc.",
-    "app_version": "2.4.0",
+    "app_version": "2.4.1-fdse",
     "utctime_updated": "2022-01-24T06:29:48.000000Z",
     "package_name": "phantom_zscaler",
     "main_module": "zscaler_connector.py",
@@ -461,6 +461,69 @@
             ],
             "render": {
                 "title": "List URL Categories",
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "update category",
+            "identifier": "update_category",
+            "description": "Updating URL and TLD Categories",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "category_id": {
+                    "description": "Category ID",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                },
+                "body": {
+                    "description": "Body content as a json for update purposes",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "test success",
+                        "test failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Update completed successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "title": "Updating URL and TLD Categories",
                 "type": "table"
             },
             "versions": "EQ(*)"
